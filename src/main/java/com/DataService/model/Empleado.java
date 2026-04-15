@@ -1,7 +1,5 @@
 package com.DataService.model;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,41 +8,38 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "venta")
+@Table(name = "empleado")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Venta {
+public class Empleado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idVenta;
+    private Long idEmpleado;
 
-    @NotNull(message = "La fecha es obligatoria")
-    @Column(nullable = false)
-    private LocalDate fecha;
+    @NotBlank(message = "El nombre es obligatorio")
+    @Size(max = 100)
+    @Column(nullable = false, length = 100)
+    private String nombre;
 
-    @NotNull(message = "El total es obligatorio")
-    @DecimalMin(value = "0.0", message = "El total no puede ser negativo")
-    @Column(nullable = false)
-    private Double total;
+    @NotBlank(message = "El cargo es obligatorio")
+    @Size(max = 50)
+    @Column(nullable = false, length = 50)
+    private String cargo;
 
     @NotNull(message = "La sucursal es obligatoria")
     @ManyToOne
     @JoinColumn(name = "id_sucursal")
     private Sucursal sucursal;
-
-    @NotNull(message = "El empleado es obligatorio")
-    @ManyToOne
-    @JoinColumn(name = "id_empleado")
-    private Empleado empleado;
 }
