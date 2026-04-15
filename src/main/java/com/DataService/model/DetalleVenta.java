@@ -1,7 +1,5 @@
 package com.DataService.model;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,33 +17,34 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "venta")
+@Table(name = "detalle_venta")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Venta {
+public class DetalleVenta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idVenta;
+    private Long idDetalle;
 
-    @NotNull(message = "La fecha es obligatoria")
+    @NotNull(message = "La cantidad es obligatoria")
+    @Min(value = 1, message = "La cantidad debe ser al menos 1")
     @Column(nullable = false)
-    private LocalDate fecha;
+    private Integer cantidad;
 
-    @NotNull(message = "El total es obligatorio")
-    @DecimalMin(value = "0.0", message = "El total no puede ser negativo")
+    @NotNull(message = "El subtotal es obligatorio")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El subtotal debe ser mayor a 0")
     @Column(nullable = false)
-    private Double total;
+    private Double subtotal;
 
-    @NotNull(message = "La sucursal es obligatoria")
+    @NotNull(message = "La venta es obligatoria")
     @ManyToOne
-    @JoinColumn(name = "id_sucursal")
-    private Sucursal sucursal;
+    @JoinColumn(name = "id_venta")
+    private Venta venta;
 
-    @NotNull(message = "El empleado es obligatorio")
+    @NotNull(message = "El producto es obligatorio")
     @ManyToOne
-    @JoinColumn(name = "id_empleado")
-    private Empleado empleado;
+    @JoinColumn(name = "id_producto")
+    private Producto producto;
 }
