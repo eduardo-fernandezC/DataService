@@ -17,6 +17,7 @@ import com.DataService.repository.VentaRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -51,6 +52,18 @@ public class VentaScheduler {
             return;
         }
 
+        List<Producto> productosConStock = new ArrayList<>();
+        for (Producto producto : productos) {
+            if (producto.getStock() != null && producto.getStock() > 0) {
+                productosConStock.add(producto);
+            }
+        }
+
+        if (productosConStock.isEmpty()) {
+            System.out.println("Sin stock disponible para generar venta");
+            return;
+        }
+
         Empleado empleado = empleados.get(random.nextInt(empleados.size()));
         Sucursal sucursal = sucursales.get(random.nextInt(sucursales.size()));
 
@@ -63,15 +76,18 @@ public class VentaScheduler {
 
         venta = ventaRepository.save(venta);
 
-        int cantidadProductos = random.nextInt(3) + 1;
+        Collections.shuffle(productosConStock, random);
+        int cantidadProductos = random.nextInt(Math.min(3, productosConStock.size())) + 1;
         List<DetalleVenta> detalles = new ArrayList<>();
+        List<Producto> productosActualizados = new ArrayList<>();
 
         double total = 0.0;
 
         for (int i = 0; i < cantidadProductos; i++) {
 
-            Producto producto = productos.get(random.nextInt(productos.size()));
-            int cantidad = random.nextInt(5) + 1;
+            Producto producto = productosConStock.get(i);
+            int maxCantidadVendible = Math.min(5, producto.getStock());
+            int cantidad = random.nextInt(maxCantidadVendible) + 1;
 
             double subtotal = producto.getPrecio() * cantidad;
 
@@ -83,8 +99,12 @@ public class VentaScheduler {
 
             detalles.add(detalle);
             total += subtotal;
+
+            producto.setStock(producto.getStock() - cantidad);
+            productosActualizados.add(producto);
         }
 
+        productoRepository.saveAll(productosActualizados);
         detalleVentaRepository.saveAll(detalles);
 
         venta.setDetalles(detalles);

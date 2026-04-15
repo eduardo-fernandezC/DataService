@@ -47,6 +47,7 @@ public class DataSeedRunner implements CommandLineRunner {
         crearSucursalesSiNoExisten();
         crearEmpleadosSiNoExisten();
         crearProductosSiNoExisten();
+        completarStockProductosExistentes();
     }
 
     private void crearRegionesSiNoExisten() {
@@ -164,14 +165,31 @@ public class DataSeedRunner implements CommandLineRunner {
         }
 
         List<Producto> productos = new ArrayList<>();
-        productos.add(crearProducto("Notebook 14", "Tecnologia", 599990.0));
-        productos.add(crearProducto("Mouse Inalambrico", "Tecnologia", 19990.0));
-        productos.add(crearProducto("Silla Ergonomica", "Muebles", 129990.0));
-        productos.add(crearProducto("Escritorio Roble", "Muebles", 169990.0));
-        productos.add(crearProducto("Audifonos Bluetooth", "Tecnologia", 39990.0));
+        productos.add(crearProducto("Notebook 14", "Tecnologia", 599990.0, 20));
+        productos.add(crearProducto("Mouse Inalambrico", "Tecnologia", 19990.0, 120));
+        productos.add(crearProducto("Silla Ergonomica", "Muebles", 129990.0, 30));
+        productos.add(crearProducto("Escritorio Roble", "Muebles", 169990.0, 25));
+        productos.add(crearProducto("Audifonos Bluetooth", "Tecnologia", 39990.0, 80));
 
         productoRepository.saveAll(productos);
         System.out.println("Productos base creados");
+    }
+
+    private void completarStockProductosExistentes() {
+        List<Producto> productos = productoRepository.findAll();
+        boolean actualizoStock = false;
+
+        for (Producto producto : productos) {
+            if (producto.getStock() == null) {
+                producto.setStock(50);
+                actualizoStock = true;
+            }
+        }
+
+        if (actualizoStock) {
+            productoRepository.saveAll(productos);
+            System.out.println("Stock inicial completado para productos existentes");
+        }
     }
 
     private Empleado crearEmpleado(String nombre, Cargo cargo, Sucursal sucursal) {
@@ -182,11 +200,12 @@ public class DataSeedRunner implements CommandLineRunner {
         return empleado;
     }
 
-    private Producto crearProducto(String nombre, String categoria, Double precio) {
+    private Producto crearProducto(String nombre, String categoria, Double precio, Integer stock) {
         Producto producto = new Producto();
         producto.setNombre(nombre);
         producto.setCategoria(categoria);
         producto.setPrecio(precio);
+        producto.setStock(stock);
         return producto;
     }
 }

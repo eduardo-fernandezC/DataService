@@ -31,6 +31,7 @@ public class ProductoService {
 			productoToUpdate.setNombre(producto.getNombre());
 			productoToUpdate.setCategoria(producto.getCategoria());
 			productoToUpdate.setPrecio(producto.getPrecio());
+			productoToUpdate.setStock(producto.getStock());
 			return productoRepository.save(productoToUpdate);
 		} else {
 			return null;
@@ -48,6 +49,9 @@ public class ProductoService {
 			}
 			if (producto.getPrecio() != null) {
 				productoToPatch.setPrecio(producto.getPrecio());
+			}
+			if (producto.getStock() != null) {
+				productoToPatch.setStock(producto.getStock());
 			}
 			return productoRepository.save(productoToPatch);
 		} else {
