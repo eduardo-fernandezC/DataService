@@ -77,6 +77,13 @@ public class VentaController {
         return ResponseEntity.ok(ventas);
     }
 
+    @GetMapping("/empleado/{idEmpleado}")
+    public ResponseEntity<List<Venta>> obtenerVentasPorEmpleado(@PathVariable Long idEmpleado) {
+
+        List<Venta> ventas = ventaService.findByEmpleado(idEmpleado);
+        return ResponseEntity.ok(ventas);
+    }
+
     @PostMapping
     public ResponseEntity<Venta> guardar(@RequestBody Venta venta) {
         Venta guardada = ventaService.save(venta);

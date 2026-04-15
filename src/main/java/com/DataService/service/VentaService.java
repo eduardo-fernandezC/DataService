@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.DataService.model.Empleado;
 import com.DataService.model.Venta;
+import com.DataService.repository.EmpleadoRepository;
 import com.DataService.repository.VentaRepository;
 
 import jakarta.transaction.Transactional;
@@ -17,6 +19,9 @@ public class VentaService {
 
 	@Autowired
 	private VentaRepository ventaRepository;
+
+	@Autowired
+	private EmpleadoRepository empleadoRepository;
 
 	public List<Venta> findAll() {
 		return ventaRepository.findAll();
@@ -79,5 +84,15 @@ public class VentaService {
 	public Venta findByIdVenta(Long idVenta) {
 		return ventaRepository.findById(idVenta).orElse(null);
 	}
+
+	public List<Venta> findByEmpleado(Long idEmpleado) {
+
+        Empleado empleado = empleadoRepository.findById(idEmpleado)
+                .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+
+        List<Venta> ventas = ventaRepository.findByEmpleado(empleado);
+
+        return ventas;
+    }
 
 }
