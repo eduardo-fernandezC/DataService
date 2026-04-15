@@ -40,7 +40,7 @@ public class VentaScheduler {
 
     private final Random random = new Random();
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(initialDelay = 5000, fixedRate = 30000)
     public void generarVentaAutomatica() {
 
         List<Producto> productos = productoRepository.findAll();
@@ -59,6 +59,7 @@ public class VentaScheduler {
         venta.setEmpleado(empleado);
         venta.setSucursal(sucursal);
         venta.setTotal(0.0);
+        venta.setDetalles(new ArrayList<>());
 
         venta = ventaRepository.save(venta);
 
@@ -86,9 +87,10 @@ public class VentaScheduler {
 
         detalleVentaRepository.saveAll(detalles);
 
+        venta.setDetalles(detalles);
         venta.setTotal(total);
         ventaRepository.save(venta);
 
-        System.out.println("Venta generada automáticamente");
+        System.out.println("Venta generada automaticamente");
     }
 }
