@@ -1,7 +1,11 @@
 package com.DataService.model;
 
+import com.DataService.model.enums.Cargo;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,10 +37,10 @@ public class Empleado {
     @Column(nullable = false, length = 100)
     private String nombre;
 
-    @NotBlank(message = "El cargo es obligatorio")
-    @Size(max = 50)
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "El cargo es obligatorio")
     @Column(nullable = false, length = 50)
-    private String cargo;
+    private Cargo cargo;
 
     @NotNull(message = "La sucursal es obligatoria")
     @ManyToOne
