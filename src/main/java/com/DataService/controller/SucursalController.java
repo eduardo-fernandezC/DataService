@@ -44,9 +44,9 @@ public class SucursalController {
         }
     }
 
-    @GetMapping("/buscarRegion/{idRegion}")
-    public ResponseEntity<List<Sucursal>> buscarPorRegion(@PathVariable Long idRegion) {
-        List<Sucursal> sucursales = sucursalService.findByRegionIdRegion(idRegion);
+    @GetMapping("/buscarCiudad/{idCiudad}")
+    public ResponseEntity<List<Sucursal>> buscarPorCiudad(@PathVariable Long idCiudad) {
+        List<Sucursal> sucursales = sucursalService.findByCiudadIdCiudad(idCiudad);
         if (sucursales.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

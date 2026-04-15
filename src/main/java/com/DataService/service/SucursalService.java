@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.DataService.model.Region;
+import com.DataService.model.Ciudad;
 import com.DataService.model.Sucursal;
 import com.DataService.repository.SucursalRepository;
 
@@ -30,7 +30,7 @@ public class SucursalService {
 		Sucursal sucursalToUpdate = sucursalRepository.findById(id).orElse(null);
 		if (sucursalToUpdate != null) {
 			sucursalToUpdate.setNombre(sucursal.getNombre());
-			sucursalToUpdate.setRegion(sucursal.getRegion());
+			sucursalToUpdate.setCiudad(sucursal.getCiudad());
 			return sucursalRepository.save(sucursalToUpdate);
 		} else {
 			return null;
@@ -43,8 +43,8 @@ public class SucursalService {
 			if (sucursal.getNombre() != null) {
 				sucursalToPatch.setNombre(sucursal.getNombre());
 			}
-			if (sucursal.getRegion() != null) {
-				sucursalToPatch.setRegion(sucursal.getRegion());
+			if (sucursal.getCiudad() != null) {
+				sucursalToPatch.setCiudad(sucursal.getCiudad());
 			}
 			return sucursalRepository.save(sucursalToPatch);
 		} else {
@@ -56,12 +56,12 @@ public class SucursalService {
 		sucursalRepository.deleteById(id);
 	}
 
-	public List<Sucursal> findByRegion(Region region) {
-		return sucursalRepository.findByRegion(region);
+	public List<Sucursal> findByCiudad(Ciudad ciudad) {
+		return sucursalRepository.findByCiudad(ciudad);
 	}
 
-	public List<Sucursal> findByRegionIdRegion(Long idRegion) {
-		return sucursalRepository.findByRegionIdRegion(idRegion);
+	public List<Sucursal> findByCiudadIdCiudad(Long idCiudad) {
+		return sucursalRepository.findByCiudadIdCiudad(idCiudad);
 	}
 
 	public Sucursal findByIdSucursal(Long idSucursal) {

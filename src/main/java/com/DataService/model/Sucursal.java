@@ -34,8 +34,8 @@ public class Sucursal {
     @Column(nullable = false, length = 100)
     private String nombre;
 
-    @NotNull(message = "La region es obligatoria")
+    @NotNull(message = "La ciudad es obligatoria")
     @ManyToOne(fetch = FetchType.LAZY) // Carga de tipo LAZY para evitar problemas de serializacion 
-    @JoinColumn(name = "id_region", nullable = false)
-    private Region region;
+    @JoinColumn(name = "id_ciudad", nullable = false)
+    private Ciudad ciudad;
 }
