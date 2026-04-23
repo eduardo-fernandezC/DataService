@@ -65,7 +65,7 @@ public class VentaScheduler {
         }
 
         Empleado empleado = empleados.get(random.nextInt(empleados.size()));
-        Sucursal sucursal = sucursales.get(random.nextInt(sucursales.size()));
+        Sucursal sucursal = empleado.getSucursal();
 
         Venta venta = new Venta();
         venta.setFecha(LocalDate.now());

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.DataService.dto.VentaResponse;
 import com.DataService.model.Empleado;
 import com.DataService.model.Venta;
 import com.DataService.repository.EmpleadoRepository;
@@ -95,4 +96,26 @@ public class VentaService {
         return ventas;
     }
 
+	// metodo de pruebas
+    public List<VentaResponse> getVentasDTO() {
+
+        List<Venta> ventas = ventaRepository.findAll();
+
+        return ventas.stream().map(v -> {
+
+            VentaResponse dto = new VentaResponse();
+
+            dto.setIdVenta(v.getIdVenta());
+            dto.setTotal(v.getTotal());
+            dto.setFecha(v.getFecha());
+
+            dto.setSucursalNombre(v.getSucursal().getNombre());
+
+            dto.setIdEmpleado(v.getEmpleado().getIdEmpleado());
+            dto.setEmpleadoNombre(v.getEmpleado().getNombre());
+
+            return dto;
+
+        }).toList();
+    }
 }
