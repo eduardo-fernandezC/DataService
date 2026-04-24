@@ -41,7 +41,7 @@ public class VentaScheduler {
 
     private final Random random = new Random();
 
-    @Scheduled(initialDelay = 5000, fixedRate = 30000)
+    @Scheduled(initialDelay = 5000, fixedRate = 60000)
     public void generarVentaAutomatica() {
 
         List<Producto> productos = productoRepository.findAll();
@@ -65,7 +65,7 @@ public class VentaScheduler {
         }
 
         Empleado empleado = empleados.get(random.nextInt(empleados.size()));
-        Sucursal sucursal = sucursales.get(random.nextInt(sucursales.size()));
+        Sucursal sucursal = empleado.getSucursal();
 
         Venta venta = new Venta();
         venta.setFecha(LocalDate.now());

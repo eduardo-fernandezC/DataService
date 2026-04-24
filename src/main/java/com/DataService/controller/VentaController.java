@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.DataService.dto.VentaResponse;
 import com.DataService.model.Venta;
 import com.DataService.service.VentaService;
 
@@ -118,5 +119,11 @@ public class VentaController {
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // Nueva versiun del endpoint para listar ventas con DTO
+    @GetMapping("/dto")
+    public ResponseEntity<List<VentaResponse>> listarV2() {
+        return ResponseEntity.ok(ventaService.getVentasDTO());
     }
 }
