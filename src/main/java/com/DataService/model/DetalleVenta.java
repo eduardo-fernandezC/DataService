@@ -1,5 +1,7 @@
 package com.DataService.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -42,10 +44,12 @@ public class DetalleVenta {
     @NotNull(message = "La venta es obligatoria")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_venta")
+    @JsonIgnore
     private Venta venta;
 
     @NotNull(message = "El producto es obligatorio")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_producto")
+    @JsonIgnore
     private Producto producto;
 }
