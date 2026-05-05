@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.DataService.model.Producto;
+import com.DataService.repository.DetalleVentaRepository;
 import com.DataService.repository.ProductoRepository;
 
 import jakarta.transaction.Transactional;
@@ -13,6 +14,9 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class ProductoService {
+
+	@Autowired
+	private DetalleVentaRepository detalleVentaRepository;
 
 	@Autowired
 	private ProductoRepository productoRepository;
@@ -59,8 +63,10 @@ public class ProductoService {
 		}
 	}
 
-	public void delete(Long id) {
-		productoRepository.deleteById(id);
+	@Transactional
+	public void eliminarProducto(Long idProducto) {
+		detalleVentaRepository.deleteByProductoIdProducto(idProducto);
+		productoRepository.deleteById(idProducto);
 	}
 
 	public List<Producto> findByCategoria(String categoria) {

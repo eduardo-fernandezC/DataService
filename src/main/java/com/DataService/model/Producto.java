@@ -54,7 +54,7 @@ public class Producto {
     @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
     private Integer stock;
 
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "producto", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
     private List<DetalleVenta> detallesVenta;
 }

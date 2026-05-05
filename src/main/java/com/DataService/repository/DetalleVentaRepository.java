@@ -12,4 +12,6 @@ public interface DetalleVentaRepository extends JpaRepository<DetalleVenta, Long
 
     List<DetalleVenta> findByVentaIdVenta(Long idVenta);
 
+    void deleteByProductoIdProducto(Long idProducto);
+
 }
