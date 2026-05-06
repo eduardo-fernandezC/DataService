@@ -5,7 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.DataService.dto.CompraResponse;
+import com.DataService.dto.DetalleCompraResponse;
 import com.DataService.model.DetalleVenta;
+import com.DataService.model.Venta;
 import com.DataService.repository.DetalleVentaRepository;
 
 import jakarta.transaction.Transactional;
@@ -65,6 +68,43 @@ public class DetalleVentaService {
 
 	public List<DetalleVenta> findByVentaIdVenta(Long idVenta) {
 		return detalleVentaRepository.findByVentaIdVenta(idVenta);
+	}
+
+	public List<DetalleCompraResponse> findDetalleCompraByVentaIdVenta(Long idVenta) {
+		return detalleVentaRepository.findByVentaIdVenta(idVenta)
+				.stream()
+				.map(detalle -> {
+					DetalleCompraResponse response = new DetalleCompraResponse();
+					response.setIdDetalle(detalle.getIdDetalle());
+					response.setIdProducto(detalle.getProducto().getIdProducto());
+					response.setNombreProducto(detalle.getProducto().getNombre());
+					response.setCategoria(detalle.getProducto().getCategoria());
+					response.setPrecio(detalle.getProducto().getPrecio());
+					response.setCantidad(detalle.getCantidad());
+					response.setSubtotal(detalle.getSubtotal());
+					return response;
+				})
+				.toList();
+	}
+
+	public CompraResponse findCompraByVentaIdVenta(Long idVenta) {
+		List<DetalleCompraResponse> productos = findDetalleCompraByVentaIdVenta(idVenta);
+		Venta venta = detalleVentaRepository.findByVentaIdVenta(idVenta)
+				.stream()
+				.findFirst()
+				.map(DetalleVenta::getVenta)
+				.orElse(null);
+
+		if (venta == null) {
+			return null;
+		}
+
+		CompraResponse response = new CompraResponse();
+		response.setIdVenta(venta.getIdVenta());
+		response.setFecha(venta.getFecha());
+		response.setTotal(venta.getTotal());
+		response.setProductos(productos);
+		return response;
 	}
 
 	public DetalleVenta findByIdDetalle(Long idDetalle) {
