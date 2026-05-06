@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.DataService.dto.CompraResponse;
 import com.DataService.model.DetalleVenta;
 import com.DataService.service.DetalleVentaService;
 
@@ -45,12 +46,12 @@ public class DetalleVentaController {
     }
 
     @GetMapping("/buscarVenta/{idVenta}")
-    public ResponseEntity<List<DetalleVenta>> buscarPorVenta(@PathVariable Long idVenta) {
-        List<DetalleVenta> detalles = detalleVentaService.findByVentaIdVenta(idVenta);
-        if (detalles.isEmpty()) {
+    public ResponseEntity<CompraResponse> buscarPorVenta(@PathVariable Long idVenta) {
+        CompraResponse compra = detalleVentaService.findCompraByVentaIdVenta(idVenta);
+        if (compra == null || compra.getProductos() == null || compra.getProductos().isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(detalles);
+        return ResponseEntity.ok(compra);
     }
 
     @PostMapping
