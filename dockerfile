@@ -1,28 +1,20 @@
-# 1. Etapa de build
 FROM maven:3.9.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
-# Copiar dependencias primero (cache)
 COPY pom.xml .
 RUN mvn dependency:go-offline
 
-# Copiar código fuente
 COPY src ./src
 
-# Construir el JAR
 RUN mvn clean package -DskipTests
 
-# 2. Etapa final (liviana)
 FROM eclipse-temurin:21-jdk-alpine
 
 WORKDIR /app
 
-# Copiar el jar generado
 COPY --from=build /app/target/*.jar app.jar
 
-# Puerto de Spring Boot
-EXPOSE 8090
+EXPOSE 8091
 
-# Ejecutar la app
 CMD ["java", "-jar", "app.jar"]
