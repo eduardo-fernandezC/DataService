@@ -15,6 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,9 @@ public class Empleado {
 
     @NotBlank(message = "El nombre es obligatorio")
     @Size(max = 100)
+    @Pattern(
+    regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$",
+    message = "El nombre solo puede contener letras y espacios")
     @Column(nullable = false, length = 100)
     private String nombre;
 

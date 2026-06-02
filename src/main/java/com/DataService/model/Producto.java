@@ -16,6 +16,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,11 +37,15 @@ public class Producto {
 
     @NotBlank(message = "El nombre es obligatorio")
     @Size(max = 100)
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\\s\\-\\.\\(\\)\"]+$",
+    message = "El nombre del producto es inválido")
     @Column(nullable = false, length = 100)
     private String nombre;
 
     @NotBlank(message = "La categoria es obligatoria")
     @Size(max = 50)
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$",
+    message = "La categoria solo puede contener letras y espacios")
     @Column(nullable = false, length = 50)
     private String categoria;
 
