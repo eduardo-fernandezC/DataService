@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +33,8 @@ public class Region {
 
     @NotBlank(message = "El nombre de la region es obligatorio")
     @Size(max = 100)
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+$", 
+    message = "El nombre de la region solo puede contener letras y espacios")
     @Column(nullable = false, length = 100)
     private String nombre;
 
