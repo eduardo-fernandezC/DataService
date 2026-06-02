@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.DataService.model.Ciudad;
 import com.DataService.service.CiudadService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/ciudades")
 public class CiudadController {
@@ -34,12 +36,12 @@ public class CiudadController {
     }
 
     @PostMapping
-    public ResponseEntity<Ciudad> save(@RequestBody Ciudad ciudad) {
+    public ResponseEntity<Ciudad> save(@Valid @RequestBody Ciudad ciudad) {
         return ResponseEntity.ok(ciudadService.save(ciudad));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Ciudad> update(@PathVariable Long id, @RequestBody Ciudad ciudad) {
+    public ResponseEntity<Ciudad> update(@PathVariable Long id, @Valid @RequestBody Ciudad ciudad) {
         return ResponseEntity.ok(ciudadService.update(id, ciudad));
     }
 

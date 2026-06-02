@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.DataService.model.Region;
 import com.DataService.service.RegionService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/regiones")
 public class RegionController {
@@ -55,13 +57,13 @@ public class RegionController {
     }
 
     @PostMapping
-    public ResponseEntity<Region> guardar(@RequestBody Region region) {
+    public ResponseEntity<Region> guardar(@Valid@RequestBody Region region) {
         Region guardada = regionService.save(region);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardada);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Region> actualizar(@PathVariable Long id, @RequestBody Region region) {
+    public ResponseEntity<Region> actualizar(@PathVariable Long id, @Valid @RequestBody Region region) {
         Region actualizada = regionService.update(id, region);
         if (actualizada != null) {
             return ResponseEntity.ok(actualizada);
@@ -71,7 +73,7 @@ public class RegionController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Region> patchRegion(@PathVariable Long id, @RequestBody Region region) {
+    public ResponseEntity<Region> patchRegion(@PathVariable Long id, @Valid @RequestBody Region region) {
         Region actualizada = regionService.patch(id, region);
         if (actualizada != null) {
             return ResponseEntity.ok(actualizada);

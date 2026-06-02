@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.DataService.model.Producto;
 import com.DataService.service.ProductoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/productos")
 public class ProductoController {
@@ -54,13 +56,13 @@ public class ProductoController {
     }
 
     @PostMapping
-    public ResponseEntity<Producto> guardar(@RequestBody Producto producto) {
+    public ResponseEntity<Producto> guardar(@Valid @RequestBody Producto producto) {
         Producto guardado = productoService.save(producto);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Producto> actualizar(@PathVariable Long id, @RequestBody Producto producto) {
+    public ResponseEntity<Producto> actualizar(@PathVariable Long id, @Valid @RequestBody Producto producto) {
         Producto actualizado = productoService.update(id, producto);
         if (actualizado != null) {
             return ResponseEntity.ok(actualizado);
@@ -70,7 +72,7 @@ public class ProductoController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Producto> patchProducto(@PathVariable Long id, @RequestBody Producto producto) {
+    public ResponseEntity<Producto> patchProducto(@PathVariable Long id, @Valid @RequestBody Producto producto) {
         Producto actualizado = productoService.patch(id, producto);
         if (actualizado != null) {
             return ResponseEntity.ok(actualizado);
