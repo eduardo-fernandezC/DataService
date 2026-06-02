@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.DataService.model.Sucursal;
 import com.DataService.service.SucursalService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/sucursales")
 public class SucursalController {
@@ -54,13 +56,13 @@ public class SucursalController {
     }
 
     @PostMapping
-    public ResponseEntity<Sucursal> guardar(@RequestBody Sucursal sucursal) {
+    public ResponseEntity<Sucursal> guardar(@Valid @RequestBody Sucursal sucursal) {
         Sucursal guardada = sucursalService.save(sucursal);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardada);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Sucursal> actualizar(@PathVariable Long id, @RequestBody Sucursal sucursal) {
+    public ResponseEntity<Sucursal> actualizar(@PathVariable Long id, @Valid @RequestBody Sucursal sucursal) {
         Sucursal actualizada = sucursalService.update(id, sucursal);
         if (actualizada != null) {
             return ResponseEntity.ok(actualizada);
@@ -70,7 +72,7 @@ public class SucursalController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Sucursal> patchSucursal(@PathVariable Long id, @RequestBody Sucursal sucursal) {
+    public ResponseEntity<Sucursal> patchSucursal(@PathVariable Long id, @Valid @RequestBody Sucursal sucursal) {
         Sucursal actualizada = sucursalService.patch(id, sucursal);
         if (actualizada != null) {
             return ResponseEntity.ok(actualizada);
