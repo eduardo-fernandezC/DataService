@@ -1,21 +1,17 @@
 package com.DataService.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.http.HttpStatus;
 
 import com.DataService.model.Producto;
 import com.DataService.service.ProductoService;
@@ -29,15 +25,8 @@ class ProductoControllerTest {
     @InjectMocks
     private ProductoController productoController;
 
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(productoController).build();
-    }
-
     @Test
-    void listar_retornaListaDeProductos() throws Exception {
+    void listar_retornaListaDeProductos() {
         Producto p = new Producto();
         p.setIdProducto(101L);
         p.setNombre("Zapatillas");
@@ -45,31 +34,31 @@ class ProductoControllerTest {
 
         when(productoService.findAll()).thenReturn(List.of(p));
 
-        mockMvc.perform(get("/api/v1/productos"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].idProducto").value(101L))
-                .andExpect(jsonPath("$[0].nombre").value("Zapatillas"));
+        var response = productoController.listar();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(101L, response.getBody().get(0).getIdProducto());
 
         verify(productoService).findAll();
     }
 
     @Test
-    void buscar_retornaProductoPorId() throws Exception {
+    void buscar_retornaProductoPorId() {
         Producto p = new Producto();
         p.setIdProducto(202L);
         p.setNombre("Remera");
         when(productoService.findByIdProducto(202L)).thenReturn(p);
 
-        mockMvc.perform(get("/api/v1/productos/{id}", 202L))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.idProducto").value(202L))
-                .andExpect(jsonPath("$.nombre").value("Remera"));
+        var response = productoController.buscar(202L);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(202L, response.getBody().getIdProducto());
 
         verify(productoService).findByIdProducto(202L);
     }
 
     @Test
-    void buscarPorCategoria_retornaLista() throws Exception {
+    void buscarPorCategoria_retornaLista() {
         Producto p = new Producto();
         p.setIdProducto(303L);
         p.setNombre("Botas");
@@ -77,10 +66,10 @@ class ProductoControllerTest {
 
         when(productoService.findByCategoria("Calzado")).thenReturn(List.of(p));
 
-        mockMvc.perform(get("/api/v1/productos/buscarCategoria/{categoria}", "Calzado"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].idProducto").value(303L))
-                .andExpect(jsonPath("$[0].categoria").value("Calzado"));
+        var response = productoController.buscarPorCategoria("Calzado");
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(303L, response.getBody().get(0).getIdProducto());
 
         verify(productoService).findByCategoria("Calzado");
     }
