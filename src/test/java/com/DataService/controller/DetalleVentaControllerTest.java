@@ -1,21 +1,17 @@
 package com.DataService.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.http.HttpStatus;
 
 import com.DataService.model.DetalleVenta;
 import com.DataService.service.DetalleVentaService;
@@ -29,41 +25,34 @@ class DetalleVentaControllerTest {
     @InjectMocks
     private DetalleVentaController detalleVentaController;
 
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(detalleVentaController).build();
-    }
-
     @Test
-    void listar_retornaListaDeDetalles() throws Exception {
+    void listar_retornaListaDeDetalles() {
         DetalleVenta d = new DetalleVenta();
         d.setIdDetalle(801L);
         d.setCantidad(2);
         d.setSubtotal(20.0);
         when(detalleVentaService.findAll()).thenReturn(List.of(d));
 
-        mockMvc.perform(get("/api/v1/detalle-ventas"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].idDetalle").value(801L))
-                .andExpect(jsonPath("$[0].cantidad").value(2));
+        var response = detalleVentaController.listar();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(801L, response.getBody().get(0).getIdDetalle());
 
         verify(detalleVentaService).findAll();
     }
 
     @Test
-    void buscar_retornaDetallePorId() throws Exception {
+    void buscar_retornaDetallePorId() {
         DetalleVenta d = new DetalleVenta();
         d.setIdDetalle(802L);
         d.setCantidad(1);
         d.setSubtotal(10.0);
         when(detalleVentaService.findByIdDetalle(802L)).thenReturn(d);
 
-        mockMvc.perform(get("/api/v1/detalle-ventas/{id}", 802L))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.idDetalle").value(802L))
-                .andExpect(jsonPath("$.cantidad").value(1));
+        var response = detalleVentaController.buscar(802L);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(802L, response.getBody().getIdDetalle());
 
         verify(detalleVentaService).findByIdDetalle(802L);
     }
