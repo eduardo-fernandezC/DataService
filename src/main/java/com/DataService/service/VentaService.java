@@ -14,6 +14,10 @@ import com.DataService.repository.VentaRepository;
 
 import jakarta.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
 @Service
 @Transactional
 public class VentaService {
@@ -97,25 +101,32 @@ public class VentaService {
     }
 
 	// metodo de pruebas
-    public List<VentaResponse> getVentasDTO() {
+    public Page<VentaResponse> getVentasDTO(Pageable pageable) {
 
-        List<Venta> ventas = ventaRepository.findAll();
+    Page<Venta> ventasPage = ventaRepository.findAll(pageable);
 
-        return ventas.stream().map(v -> {
+    List<VentaResponse> ventasDTO = ventasPage.getContent()
+            .stream()
+            .map(v -> {
 
-            VentaResponse dto = new VentaResponse();
+                VentaResponse dto = new VentaResponse();
 
-            dto.setIdVenta(v.getIdVenta());
-            dto.setTotal(v.getTotal());
-            dto.setFecha(v.getFecha());
+                dto.setIdVenta(v.getIdVenta());
+                dto.setTotal(v.getTotal());
+                dto.setFecha(v.getFecha());
 
-            dto.setSucursalNombre(v.getSucursal().getNombre());
+                dto.setSucursalNombre(v.getSucursal().getNombre());
 
-            dto.setIdEmpleado(v.getEmpleado().getIdEmpleado());
-            dto.setEmpleadoNombre(v.getEmpleado().getNombre());
+                dto.setIdEmpleado(v.getEmpleado().getIdEmpleado());
+                dto.setEmpleadoNombre(v.getEmpleado().getNombre());
 
-            return dto;
+                return dto;
 
-        }).toList();
-    }
+            }).toList();
+
+    return new PageImpl<>(
+            ventasDTO,
+            pageable,
+            ventasPage.getTotalElements());
+	}
 }
