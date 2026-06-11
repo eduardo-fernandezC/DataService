@@ -22,6 +22,9 @@ import com.DataService.dto.VentaResponse;
 import com.DataService.model.Venta;
 import com.DataService.service.VentaService;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import jakarta.validation.Valid;
 
 @RestController
@@ -125,7 +128,7 @@ public class VentaController {
 
     // Nueva versiun del endpoint para listar ventas con DTO
     @GetMapping("/dto")
-    public ResponseEntity<List<VentaResponse>> listarV2() {
-        return ResponseEntity.ok(ventaService.getVentasDTO());
+    public ResponseEntity<Page<VentaResponse>> listarV2(Pageable pageable) {
+        return ResponseEntity.ok(ventaService.getVentasDTO(pageable));
     }
 }
