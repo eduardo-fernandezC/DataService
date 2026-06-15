@@ -19,6 +19,8 @@ import com.DataService.model.Empleado;
 import com.DataService.model.enums.Cargo;
 import com.DataService.service.EmpleadoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/empleados")
 public class EmpleadoController {
@@ -64,13 +66,13 @@ public class EmpleadoController {
     }
 
     @PostMapping
-    public ResponseEntity<Empleado> guardar(@RequestBody Empleado empleado) {
+    public ResponseEntity<Empleado> guardar(@Valid @RequestBody Empleado empleado) {
         Empleado guardado = empleadoService.save(empleado);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Empleado> actualizar(@PathVariable Long id, @RequestBody Empleado empleado) {
+    public ResponseEntity<Empleado> actualizar(@PathVariable Long id, @Valid @RequestBody Empleado empleado) {
         Empleado actualizado = empleadoService.update(id, empleado);
         if (actualizado != null) {
             return ResponseEntity.ok(actualizado);
@@ -80,7 +82,7 @@ public class EmpleadoController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Empleado> patchEmpleado(@PathVariable Long id, @RequestBody Empleado empleado) {
+    public ResponseEntity<Empleado> patchEmpleado(@PathVariable Long id, @Valid @RequestBody Empleado empleado) {
         Empleado actualizado = empleadoService.patch(id, empleado);
         if (actualizado != null) {
             return ResponseEntity.ok(actualizado);

@@ -19,6 +19,8 @@ import com.DataService.dto.CompraResponse;
 import com.DataService.model.DetalleVenta;
 import com.DataService.service.DetalleVentaService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/detalle-ventas")
 public class DetalleVentaController {
@@ -55,13 +57,13 @@ public class DetalleVentaController {
     }
 
     @PostMapping
-    public ResponseEntity<DetalleVenta> guardar(@RequestBody DetalleVenta detalleVenta) {
+    public ResponseEntity<DetalleVenta> guardar(@Valid @RequestBody DetalleVenta detalleVenta) {
         DetalleVenta guardado = detalleVentaService.save(detalleVenta);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DetalleVenta> actualizar(@PathVariable Long id, @RequestBody DetalleVenta detalleVenta) {
+    public ResponseEntity<DetalleVenta> actualizar(@PathVariable Long id, @Valid @RequestBody DetalleVenta detalleVenta) {
         DetalleVenta actualizado = detalleVentaService.update(id, detalleVenta);
         if (actualizado != null) {
             return ResponseEntity.ok(actualizado);
@@ -71,7 +73,7 @@ public class DetalleVentaController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<DetalleVenta> patchDetalleVenta(@PathVariable Long id, @RequestBody DetalleVenta detalleVenta) {
+    public ResponseEntity<DetalleVenta> patchDetalleVenta(@PathVariable Long id, @Valid @RequestBody DetalleVenta detalleVenta) {
         DetalleVenta actualizado = detalleVentaService.patch(id, detalleVenta);
         if (actualizado != null) {
             return ResponseEntity.ok(actualizado);

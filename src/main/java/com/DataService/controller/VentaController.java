@@ -22,6 +22,11 @@ import com.DataService.dto.VentaResponse;
 import com.DataService.model.Venta;
 import com.DataService.service.VentaService;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/ventas")
 public class VentaController {
@@ -86,13 +91,13 @@ public class VentaController {
     }
 
     @PostMapping
-    public ResponseEntity<Venta> guardar(@RequestBody Venta venta) {
+    public ResponseEntity<Venta> guardar(@Valid @RequestBody Venta venta) {
         Venta guardada = ventaService.save(venta);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardada);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Venta> actualizar(@PathVariable Long id, @RequestBody Venta venta) {
+    public ResponseEntity<Venta> actualizar(@PathVariable Long id, @Valid @RequestBody Venta venta) {
         Venta actualizada = ventaService.update(id, venta);
         if (actualizada != null) {
             return ResponseEntity.ok(actualizada);
@@ -102,7 +107,7 @@ public class VentaController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Venta> patchVenta(@PathVariable Long id, @RequestBody Venta venta) {
+    public ResponseEntity<Venta> patchVenta(@PathVariable Long id, @Valid @RequestBody Venta venta) {
         Venta actualizada = ventaService.patch(id, venta);
         if (actualizada != null) {
             return ResponseEntity.ok(actualizada);
@@ -123,7 +128,7 @@ public class VentaController {
 
     // Nueva versiun del endpoint para listar ventas con DTO
     @GetMapping("/dto")
-    public ResponseEntity<List<VentaResponse>> listarV2() {
-        return ResponseEntity.ok(ventaService.getVentasDTO());
+    public ResponseEntity<Page<VentaResponse>> listarV2(Pageable pageable) {
+        return ResponseEntity.ok(ventaService.getVentasDTO(pageable));
     }
 }

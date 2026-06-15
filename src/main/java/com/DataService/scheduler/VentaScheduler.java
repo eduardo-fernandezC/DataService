@@ -41,7 +41,7 @@ public class VentaScheduler {
 
     private final Random random = new Random();
 
-    @Scheduled(initialDelay = 5000, fixedRate = 60000)
+    @Scheduled(initialDelay = 5000, fixedRate = 14400000)
     public void generarVentaAutomatica() {
 
         List<Producto> productos = productoRepository.findAll();
